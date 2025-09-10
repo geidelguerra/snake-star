@@ -1,0 +1,64 @@
+package templates
+
+import "snake-star/game"
+import "fmt"
+
+type LayoutProps struct {
+	AssetPath func(string) string
+}
+
+type StateUpdateProps struct {
+	State *game.Game
+}
+
+templ StateUpdate(props StateUpdateProps) {
+	<div id="game" data-on-keydown__window___debounce.100ms="['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Escape', 'r', 'h'].includes(evt.key) && @post(`/input?key=${evt.key}`);">
+		<div ref="board" style={ fmt.Sprintf(`--rows: %d; --cols: %d`, props.State.Rows, props.State.Cols) }>
+			for col := range props.State.Cols {
+				for row := range props.State.Rows {
+					<div role="cell" row={ row } col={ col }></div>
+				}
+			}
+			if props.State.Fruit.Active {
+				<div ref="fruit" style={ fmt.Sprintf(`--fruit-x: %d; --fruit-y: %d`, props.State.Fruit.X, props.State.Fruit.Y) }></div>
+			}
+			for _, tail := range props.State.Player.Tail {
+				<div role="tail" style={ fmt.Sprintf(`--tail-x: %d; --tail-y: %d`, tail.X, tail.Y) }></div>
+			}
+			<div ref="player" style={ fmt.Sprintf(`--player-x: %d; --player-y: %d`, props.State.Player.X, props.State.Player.Y) }></div>
+		</div>
+		<div ref="hud">
+			<div ref="score">Score { props.State.Score }</div>
+		</div>
+		if props.State.IsPaused {
+			<div ref="overlay">
+				<div ref="message">Paused</div>
+			</div>
+		}
+		if props.State.ShowHelp {
+			<div ref="help">
+				<p>Use arrow keys to move the snake.</p>
+				<p>Press "Escape" to toggle pause.</p>
+				<p>Press "R" to restart the game.</p>
+				<p>Press "H" to toggle this help message.</p>
+			</div>
+		}
+	</div>
+}
+
+templ Layout(props LayoutProps) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Snake Star</title>
+			<link rel="stylesheet" href={ props.AssetPath("css/styles.css") }/>
+			<script type="module" src={ props.AssetPath("js/vendor/datastar.js") }></script>
+		</head>
+		<body>
+			<div id="updater" data-on-load="@get('/updates')"></div>
+			<div id="game"></div>
+		</body>
+	</html>
+}

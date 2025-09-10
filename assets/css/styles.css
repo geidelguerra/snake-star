@@ -1,0 +1,110 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#game {
+    --cell-size: 50px;
+    --player-width: var(--cell-size);
+    --player-height: var(--cell-size);
+    --fruit-width: var(--cell-size);
+    --fruit-height: var(--cell-size);
+    --grid-width: calc(var(--cols) * var(--cell-size));
+    --grid-height: calc(var(--rows) * var(--cell-size));
+
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & [ref="board"] {
+        display: grid;
+        grid-template-columns: repeat(var(--cols), var(--cell-size));
+        grid-template-rows: repeat(var(--rows), var(--cell-size));
+        width: var(--grid-width);
+        height: var(--grid-height);
+        box-sizing: border-box;
+        position: relative;
+
+        & [role="cell"] {
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        & [ref="player"] {
+            position: absolute;
+            width: var(--player-width);
+            height: var(--player-height);
+            background-color: green;
+            left: calc(var(--player-x) * var(--player-width));
+            top: calc(var(--player-y) * var(--player-height));
+        }
+
+        & [role="tail"] {
+            position: absolute;
+            width: var(--player-width);
+            height: var(--player-height);
+            background-color: lightgreen;
+            left: calc(var(--tail-x) * var(--player-width));
+            top: calc(var(--tail-y) * var(--player-height));
+        }
+
+        & [ref="fruit"] {
+            position: absolute;
+            width: var(--player-width);
+            height: var(--player-height);
+            background-color: red;
+            left: calc(var(--fruit-x) * var(--fruit-width));
+            top: calc(var(--fruit-y) * var(--fruit-height));
+        }
+    }
+
+    & [ref="hud"] {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 20px;
+    }
+
+    & [ref="help"] {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        z-index: 12;
+        background-color: grey;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 15px;
+        font-family: monospace;
+        font-size: 16px;
+        line-height: 1.1;
+    }
+
+    & [ref="overlay"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 20;
+        box-sizing: border-box;
+        background-color: rgba(0, 0, 0, 0.75);
+        color: white;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        text-align: center;
+    }
+}
