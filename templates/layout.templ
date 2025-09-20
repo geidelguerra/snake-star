@@ -1,6 +1,6 @@
 package templates
 
-import "snake-star/game"
+import "snake-star/core"
 import "fmt"
 
 type LayoutProps struct {
@@ -8,7 +8,29 @@ type LayoutProps struct {
 }
 
 type StateUpdateProps struct {
-	State *game.Game
+	State *core.Game
+}
+
+templ GameTimeout() {
+	<div id="game">
+		<div ref="overlay">
+			<div ref="message">
+				<p>Your session has timed out due to inactivity.</p>
+				<p>Please refresh the page to start a new game.</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ MaxGamesReached() {
+	<div id="game">
+		<div ref="overlay">
+			<div ref="message">
+				<p>The maximum number of concurrent game sessions has been reached.</p>
+				<p>Please try again later.</p>
+			</div>
+		</div>
+	</div>
 }
 
 templ StateUpdate(props StateUpdateProps) {
